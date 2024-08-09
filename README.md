@@ -1,34 +1,64 @@
-This is a [Next.js](https://nextjs.org/) project bootstrapped with [`create-next-app`](https://github.com/vercel/next.js/tree/canary/packages/create-next-app).
+# RealTrade
 
-## Getting Started
+### Directly Backed Trading On-Chain: Real Assets, Real Security
 
-First, run the development server:
+Our project addresses a crucial gap in the current landscape of real-world assets (RWAs) on the blockchain. Traditional synthetic RWAs only mint tokens based on price feeds, creating an abstraction layer that does not connect directly to the underlying assets. Our solution takes a more direct approach by enabling RWAs that are directly backed by real assets.
 
-```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
+By utilizing Gelato functions, our platform executes stock purchases off-chain, ensuring that the tokens you hold are genuinely backed by real-world assets. This enhances trust, transparency, and the overall value proposition of RWAs on-chain, effectively bridging the gap between traditional finance and blockchain technology.
+
+#### Currently Deployed on Lisk Sepolia and Supports the Following Stocks:
+- [AAPL](https://sepolia-blockscout.lisk.com/address/0x06e692951f08031423344228FF52b7544248b188)
+- [AMZN](https://sepolia-blockscout.lisk.com/address/0x1E30638373f2d76cA5AC17e58f08f03A6C1E9744)
+- [NASDAQ](https://sepolia-blockscout.lisk.com/address/0xA870c6739fC08dF98E2cB9F587a42C9347B83509)
+- [S&P500](https://sepolia-blockscout.lisk.com/address/0xc74E6d979CE9004FF8D92f6F0ea0654dF2E52e42)
+
+This repository includes the contract and Web3 functions, which need to be deployed separately for testing.
+
+### For Contract:
+```
+$ forge init // Move the contract to foundry directory
+$ forge install redstone-finance/redstone-oracles-monorepo --no-commit
+$ forge install OpenZeppelin/openzeppelin-contracts@v4.9.5 --no-commit
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+### For web3-function
+```
+$ git clone https://github.com/gelatodigital/web3-functions-sdk.git
+// Move the stocks and updates folder to web3-function
+$ npx hardhat w3f-deploy stocks // to get the typescript function IPFS CID
+```
 
-You can start editing the page by modifying `app/page.js`. The page auto-updates as you edit the file.
+### For web-app
+```
+$ npm i
+$ npm run dev
+```
 
-This project uses [`next/font`](https://nextjs.org/docs/basic-features/font-optimization) to automatically optimize and load Inter, a custom Google Font.
 
-## Learn More
+### Environment Variables:
+Environment variables are needed for Web3 functions as they use the [Alpaca API](https://app.alpaca.markets/signup) for stock trading.
 
-To learn more about Next.js, take a look at the following resources:
+#### USDT Contract:
+The [USDT contract](https://sepolia-blockscout.lisk.com/address/0x2728DD8B45B788e26d12B13Db5A244e5403e7eda) used in the prototype is the most utilized USDT contract on Lisk Sepolia, deployed by HUOSTATER. Obtain USDT from the [faucet](https://lisk-sepolia.huostarter.io/).
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+#### Gelato Deployed Functions:
+- [MarketAAPL](https://app.gelato.network/functions/task/0x3a67e17be48fffd59fd9e7b4dbdfab276b2d331700ca2e95772621811a731ada:4202)
+- [BuyAAPL](https://app.gelato.network/functions/task/0x7d770f030f5af725dc544634207c9af76a44403404d659f0cc73c0c286f6f39b:4202)
+- [SellAAPL](https://app.gelato.network/functions/task/0xe0d1e4957fd01fa621d8876272cd612d4d3936b15e7afe7e93d8e5cf5887d721:4202)
+- [MarketAMZN](https://app.gelato.network/functions/task/0x2221e57f9fcab7d45140e90569215e7cdbfea67b6d179dca1dce0e3935d4d1bf:4202)
+- [BuyAMZN](https://app.gelato.network/functions/task/0x45d4698bf678f3a993059b9ae9714f853de741c6637010bdd852508b0b818693:4202)
+- [SellAMZN](https://app.gelato.network/functions/task/0x157cd2bd6761a36aba91b61139e851d4a1e67b6057d8a0b087b555b69de9d977:4202)
+- [MarketNASDAQ](https://app.gelato.network/functions/task/0xb41b4b935afa996a2e21ae373fd4f483b8c04af8da6b476c3d130cde9a53a8db:4202)
+- [BuyNASDAQ](https://app.gelato.network/functions/task/0x0fb888bbafced9e05a57607973e42490001c3c120537ff2e30fcccb683dae5ed:4202)
+- [SellNASDAQ](https://app.gelato.network/functions/task/0xd5bade2e842573b185c749b5cd65d8c4a2ead528159715b9aba78aae1845ae7d:4202)
+- [MarketSPY](https://app.gelato.network/functions/task/0x591ef3a432e2c97719b0e235f4e7069e3b671c5517da7b8f53b9dd639831d77d:4202)
+- [BuySPY](https://app.gelato.network/functions/task/0x5296eaa63e18ac836da6870ff3cef76cc9c93ef5e24429a251bc15824d356428:4202)
+- [SellSPY](https://app.gelato.network/functions/task/0xba043d2cec0e299f74a3acdf04c7506fb29e45394e5eb5b9d544f6fdb2f4a60c:4202)
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js/) - your feedback and contributions are welcome!
+- **Market Function**: Manages pausing and unpausing of the contract based on market status.
+- **Buy Function**: Listens for `BuyRequest` events, interacts with the Alpaca API to purchase stock, and mints the corresponding ERC20 token to the trader.
+- **Sell Function**: Listens for `SellRequest` events, interacts with the Alpaca API to sell stock, and burns the corresponding ERC20 token from the trader.
 
-## Deploy on Vercel
+### [Demo Video](https://youtu.be/v3Bq-6OxTW8)
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/deployment) for more details.
+## Built during [ETHSEA](https://www.ethsea.com/)
