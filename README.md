@@ -12,6 +12,15 @@ By utilizing Gelato functions, our platform executes stock purchases off-chain, 
 - [NASDAQ](https://sepolia-blockscout.lisk.com/address/0xA870c6739fC08dF98E2cB9F587a42C9347B83509)
 - [S&P500](https://sepolia-blockscout.lisk.com/address/0xc74E6d979CE9004FF8D92f6F0ea0654dF2E52e42)
 
+#### The flow of the Dapp is as follows:-
+- Approve and deposit the suffcient amount of USDT to the contract.
+- Select the stock and the correct amount.
+- Redstone's core price feed wraps the transaction with its oracle data.
+- After calling the `buyRStock` function, a `BuyRequest` gets emmitted.
+- The event is picked up by Gelato's web3-function, which calls the Alpaca API to buy the respective stock in the exchange.
+- It then excutes the `mintRStock` function, which mints the directly backed ERC20 of the RWA on-chain.
+- In a similar manner, it can be sold and the USDT can be withdrawn. 
+
 This repository includes the contract and Web3 functions, which need to be deployed separately for testing.
 
 ### For Contract:
