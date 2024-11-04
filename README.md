@@ -18,7 +18,6 @@ By utilizing Gelato functions, our platform executes stock purchases off-chain, 
 - Redstone's core price feed wraps the transaction with its oracle data.
 - After calling the `buyRStock` function, a `BuyRequest` gets emmitted.
 - The event is picked up by Gelato's web3-function, which calls the Alpaca API to buy the respective stock in the exchange.
-- The API handles buying and selling of the stocks based on the gelato function triggers.
 - It then excutes the `mintRStock` function, which mints the directly backed ERC20 of the RWA on-chain.
 - In a similar manner, it can be sold and the USDT can be withdrawn. 
 
